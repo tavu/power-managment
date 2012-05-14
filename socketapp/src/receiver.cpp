@@ -20,9 +20,9 @@ using namespace std;
 int receiver::run()
 {
     (void) signal(SIGUSR1,initTime);
- 
+
     log<<"Starting"<<endl;
-    
+
     int k=soc->bindSocket();
     if(k!=0)
     {
@@ -85,13 +85,14 @@ void receiver::initTime(int)
         curr_time=time(NULL);
         start_time=curr_time;
         txSum=0;
-        timeS=true;        
+        timeS=true;
     }
     else
     {
         time_t t=curr_time;
-        time(&curr_time);
-        txLog<<(txSum + curr_tx*(curr_time-t)) /(curr_time-start_time) <<endl;
+        curr_time=time(NULL);
+        txSum=+(curr_time-t)*curr_tx;
+        txLog<<( (double)txSum) /(curr_time-start_time )<<endl;
         timeS=false;
         txLog.close();
     }
@@ -121,9 +122,9 @@ int receiver::setPower(char rssi)
     {
         time_t t=curr_time;
         curr_time=time(NULL);
-        
+
         txSum=+(curr_time-t)*curr_tx;
-        
+
         char foo[3];
         string cmd = "iwconfig ";
         cmd+=WLAN;
@@ -133,12 +134,12 @@ int receiver::setPower(char rssi)
 
         if(system(cmd.c_str()) !=0)
         {
-            printf("error on system command\n");
+            cout<<"error on system command"<<endl;
             return -1;
         }
-        log<<'\t'<<cmd<<endl; 
+        log<<'\t'<<cmd<<endl;
         curr_tx=tx_new;
-    }            
+    }
 
     return 0;
 }

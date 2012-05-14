@@ -33,10 +33,9 @@ struct mechMes socketC::received()
         std::cout<<"waiting message"<<std::endl;
         memset(buff,0,BUFF_S+1);
         if(recvfrom(sockfd,buff,BUFF_S,0,(struct sockaddr *)&peer,&len) > 0)
-        {            
+        {
             if(buff[0]==MECH )
             {
-                cout<<"message received "<<buff<<endl;
                 break ;
             }
         }
@@ -46,6 +45,8 @@ struct mechMes socketC::received()
     message.type=buff[1];
     message.value=buff[2];
     message.ip=std::string(inet_ntoa(peer.sin_addr) );
+
+    cout<<"message received "<<message.type<<endl;
 
     return message;
 }

@@ -97,7 +97,7 @@ struct packet_info sender::readRssi()
 
     if(packet.rssi<0)
     {
-        printf("ERR:negative rssi\n");
+        cout<<"ERR:negative rssi\n"<<endl;
     }
 
     p+=5;
