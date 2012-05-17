@@ -3,10 +3,13 @@ CXXFLAGS = -ggdb
 TARGET   = ../build
 
 
-all: mktarget baseRun nodeRun
+all: mktarget baseRun nodeRun txaver
 
 mktarget:
 	mkdir -p $(TARGET)
+
+txaver: aver.cpp
+	$(CXX) $(CXXFLAGS) $^ -o $(TARGET)/$@
 
 main: main.cpp $(TARGET)/base_receiver.o $(TARGET)/sender.o  $(TARGET)/average.o $(TARGET)/receiver.o $(TARGET)/node.o $(TARGET)/nodeMap.o $(TARGET)/socketC.o
 	$(CXX) $(CXXFLAGS)  -lpthread $^ -o $(TARGET)/$@

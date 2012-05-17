@@ -11,10 +11,8 @@
 class receiver :public Thread
 {
     public:
-        receiver() :Thread(),log(LOG_F)
-        {
-            
-        }
+        receiver();
+
         virtual ~receiver()
         {
             log.close();
@@ -39,16 +37,9 @@ class receiver :public Thread
         socketC *soc;
         
     private:
-        static time_t curr_time;
-        static time_t start_time;
-        
-        static bool timeS;
-        static std::ofstream txLog;
-        static char curr_tx;
-        
-        static void initTime(int );
-        
-        static long int txSum;
+
+        std::ofstream txLog;
+        char curr_tx;
 };
 
 #endif

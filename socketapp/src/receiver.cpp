@@ -17,10 +17,13 @@
 
 using namespace std;
 
+receiver::receiver() :Thread(),log(LOG_F)
+{
+    curr_tx=TX_DEF;
+}
+
 int receiver::run()
 {
-    (void) signal(SIGUSR1,initTime);
-
     log<<"Starting"<<endl;
 
     int k=soc->bindSocket();
@@ -29,7 +32,6 @@ int receiver::run()
         log<<"could not bind socket"<<endl;
         log<<"ERR "<<k<<endl;
         return 0;
-
     }
 
     while(1)
@@ -77,32 +79,8 @@ int receiver::run()
     return 0;
 }
 
-void receiver::initTime(int)
-{
-    if(!timeS)
-    {
-        txLog.open(TX_LOG);
-        curr_time=time(NULL);
-        start_time=curr_time;
-        txSum=0;
-        timeS=true;
-    }
-    else
-    {
-        time_t t=curr_time;
-        curr_time=time(NULL);
-        txSum=+(curr_time-t)*curr_tx;
-        txLog<<( (double)txSum) /(curr_time-start_time )<<endl;
-        timeS=false;
-        txLog.close();
-    }
-}
-
-
 int receiver::setPower(char rssi)
 {
-//     curr_tx=TX_DEF;
-
     if(rssi<0 )
     {
         return -1;
@@ -120,11 +98,6 @@ int receiver::setPower(char rssi)
 
     if(tx_new!=curr_tx)
     {
-        time_t t=curr_time;
-        curr_time=time(NULL);
-
-        txSum=+(curr_time-t)*curr_tx;
-
         char foo[3];
         string cmd = "iwconfig ";
         cmd+=WLAN;
@@ -132,22 +105,20 @@ int receiver::setPower(char rssi)
         sprintf(foo,"%d",tx_new);
         cmd.append(foo);
 
+        time_t t=time(NULL);
         if(system(cmd.c_str()) !=0)
         {
             cout<<"error on system command"<<endl;
             return -1;
         }
-        log<<'\t'<<cmd<<endl;
+
+        txLog.open(TX_LOG);
+        txLog<<t<<'\t'<<curr_tx<<'\t'<<tx_new<<endl;
         curr_tx=tx_new;
+        txLog.close();
+
+        log<<'\t'<<cmd<<endl;
     }
 
     return 0;
 }
-
-bool receiver::timeS=false;
-long int receiver::txSum=0;
-std::ofstream receiver::txLog;
-
-time_t receiver::curr_time;
-time_t receiver::start_time;
-char receiver::curr_tx=TX_DEF;
