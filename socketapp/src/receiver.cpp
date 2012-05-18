@@ -113,7 +113,10 @@ int receiver::setPower(char rssi)
         }
 
         txLog.open(TX_LOG);
-        txLog<<t<<'\t'<<curr_tx<<'\t'<<tx_new<<endl;
+        int k=curr_tx
+        txLog<<t<<'\t'<<k;
+        int k=tx_new
+        txLog<<'\t'<<k<<endl;
         curr_tx=tx_new;
         txLog.close();
 
