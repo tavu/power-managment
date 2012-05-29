@@ -112,7 +112,7 @@ int receiver::setPower(char rssi)
             return -1;
         }
 
-        txLog.open(TX_LOG);
+        txLog.open(TX_LOG,std::ios::out | std::ios::app);
         int txl=curr_tx;
         txLog<<t<<'\t'<<txl;
         txl=tx_new;
