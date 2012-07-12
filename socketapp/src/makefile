@@ -1,5 +1,5 @@
-CXX      =  g++
-CXXFLAGS = -ggdb
+CXX      =  g++ 
+CXXFLAGS = -ggdb 
 TARGET   = ../build
 
 
@@ -12,13 +12,13 @@ txaver: aver.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $(TARGET)/$@
 
 main: main.cpp $(TARGET)/base_receiver.o $(TARGET)/sender.o  $(TARGET)/average.o $(TARGET)/receiver.o $(TARGET)/node.o $(TARGET)/nodeMap.o $(TARGET)/socketC.o
-	$(CXX) $(CXXFLAGS)  -lpthread $^ -o $(TARGET)/$@
+	$(CXX) $(CXXFLAGS)  -lpthread -pthread $^ -o $(TARGET)/$@
 
-baseRun: baseRun.cpp $(TARGET)/base_receiver.o $(TARGET)/sender.o  $(TARGET)/average.o $(TARGET)/receiver.o $(TARGET)/node.o $(TARGET)/nodeMap.o $(TARGET)/socketC.o
-	$(CXX) $(CXXFLAGS)  -lpthread $^ -o $(TARGET)/$@
+baseRun: baseRun.cpp $(TARGET)/base_receiver.o $(TARGET)/sender.o $(TARGET)/timeout.o $(TARGET)/average.o $(TARGET)/receiver.o $(TARGET)/node.o $(TARGET)/nodeMap.o $(TARGET)/socketC.o
+	$(CXX) $(CXXFLAGS)  -lpthread -pthread $^ -o $(TARGET)/$@
 
 nodeRun: nodeRun.cpp $(TARGET)/base_receiver.o $(TARGET)/hello.o $(TARGET)/sender.o  $(TARGET)/average.o $(TARGET)/receiver.o $(TARGET)/node.o $(TARGET)/nodeMap.o $(TARGET)/socketC.o
-	$(CXX) $(CXXFLAGS)  -lpthread $^ -o $(TARGET)/$@
+	$(CXX) $(CXXFLAGS)  -lpthread -pthread $^ -o $(TARGET)/$@
 
 
 
@@ -36,10 +36,13 @@ $(TARGET)/base_receiver.o: base_receiver.cpp $(TARGET)/receiver.o
 	$(CXX) $(CXXFLAGS) base_receiver.cpp -c -o $@
 
 $(TARGET)/receiver.o: receiver.cpp
-	$(CXX) $(CXXFLAGS) -lpthread receiver.cpp -c -o $@
+	$(CXX) $(CXXFLAGS) -lpthread -pthread receiver.cpp -c -o $@
 
 $(TARGET)/hello.o: hello.cpp $(TARGET)/nodeMap.o
-	$(CXX) $(CXXFLAGS) -lpthread hello.cpp -c -o $@
+	$(CXX) $(CXXFLAGS) -lpthread -pthread hello.cpp -c -o $@
+
+$(TARGET)/timeout.o:timeout.cpp
+	$(CXX) $(CXXFLAGS) -lpthread -pthread timeout.cpp -c -o $@
 
 $(TARGET)/nodeMap.o: nodeMap.cpp
 	$(CXX) $(CXXFLAGS) $^  -c -o $@

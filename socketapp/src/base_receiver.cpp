@@ -13,6 +13,8 @@
 #include <unistd.h>*/
 
 using namespace std;
+typedef std::map<std::string,node*>::iterator nodeIter;
+
 void baseReceiver::rssiReceived(string ip,char value)
 {
     if(value<0)
@@ -144,4 +146,30 @@ void baseReceiver::handShR(string ip)
         cout<<"sendAck"<<endl;
         soc->sendHshAck(ip);
     }
+}
+
+
+void baseReceiver::checkForTimeouts()
+{
+
+    nMap()->lock();
+    
+    for(nodeIter cnode = nMap()->ipBegin() ; cnode!=nMap()->ipEnd(); cnode++)
+    {
+      
+      if(nMap()->nodeFromIt(cnode) -> getHelloMessages() == 0)
+      {
+	if(find_lowest() == nMap()->nodeFromIt(cnode)->mySignal())
+	{
+	  low_nodes.remove(nMap()->nodeFromIt(cnode)->ip());
+	}
+	nMap()->delete_node(nMap()->nodeFromIt(cnode));
+      }
+      else
+      {
+	nMap()->nodeFromIt(cnode) -> resetHelloMessages();
+      }
+    }
+    nMap()->unlock();
+    
 }

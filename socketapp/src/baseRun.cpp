@@ -2,13 +2,14 @@
 #include"sender.h"
 #include"nodeMap.h"
 #include"socketC.h"
+#include"timeout.h"
 #include <signal.h>
-
 #include <unistd.h>
 
 sender *Send;
 baseReceiver *Rec;
 socketC *Soc;
+timeoutChecker *Chk;
 
 void leave(int sig);
 
@@ -22,6 +23,7 @@ int main()
     Soc =new socketC();
     Send =new sender();
     Rec =new baseReceiver();
+    Chk = new timeoutChecker(Rec);
 
     Soc->init();
 
@@ -29,8 +31,10 @@ int main()
     Rec->setSocket(Soc);
 
     Rec->start();
+    Chk->start();
     Send->start();
     Rec->join();
+    Chk->join();
 }
 
 void leave(int sig)

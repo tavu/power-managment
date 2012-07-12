@@ -11,9 +11,11 @@ class baseReceiver :public receiver
         {
             low_rssi=255;//just a very big value
         };
+	void checkForTimeouts();
     protected:
         void rssiReceived(std::string ip,char rssi);
         void handShR(std::string ip);
+	
 
     private:
 //         std::map <std::string,char> mapped_network;

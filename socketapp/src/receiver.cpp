@@ -43,6 +43,8 @@ int receiver::run()
         if(m.type==HELLOW )
         {
             log<<'\t'<<"hello"<<endl;
+	    node *n = nMap()->nodeFromIp(m.ip);
+	    n->helloInc();
             continue;
         }
         else if(m.type==RSSI_M)
