@@ -3,14 +3,16 @@
 #include"receiver.h"
 #include<map>
 #include <list>
+#include<pthread.h>
 
 class baseReceiver :public receiver
 {
     public:
         baseReceiver():receiver()
         {
+	    pthread_mutex_init(&mutex, NULL);
             low_rssi=255;//just a very big value
-        };
+        }
 	void checkForTimeouts();
     protected:
         void rssiReceived(std::string ip,char rssi);
@@ -25,5 +27,16 @@ class baseReceiver :public receiver
 
         char find_lowest();
         void clear();
+	
+	void lock()
+        {
+            pthread_mutex_lock(&mutex);
+        }
+
+        void unlock()
+        {
+            pthread_mutex_unlock(&mutex);
+        }
+	pthread_mutex_t mutex;
 };
 #endif
