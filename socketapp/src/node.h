@@ -52,11 +52,26 @@ class node
         {
             return _mySignal;
         }
+        
+        short int getHelloMessages()
+	{
+	  return hello_messages;
+	}
 
         void setMySignal(char s)
         {
             _mySignal=s;
         }
+        
+        void helloInc()
+        {
+	  hello_messages++;
+	}
+	
+	void resetHelloMessages()
+	{
+	  hello_messages = 0;
+	}
 
         bool needSend();
 
@@ -71,6 +86,7 @@ class node
         std::string _mac;
         std::string _ip;
 //         char _lastRssi;
+	short int hello_messages;
         char ackRssi;
         char _mySignal;
 
