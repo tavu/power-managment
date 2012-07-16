@@ -12,6 +12,11 @@ int main( int argc, const char* argv[] )
         exit(1);
     }
     
+    for(int i=0;i<argc;i++)
+    {
+      printf("%s\n",argv[i]);
+    }
+    
     ifstream txLog;
     
     long int start_time = atol(argv[1] );
@@ -20,21 +25,24 @@ int main( int argc, const char* argv[] )
     
     txLog.open(file);
     
-    int start_tx;
+    int start_tx=20;
     int end_tx;    
     long int pre_time=start_time;
     
-    long int sum=0;
-    while(txLog.good() )
-    {
-        long int time;
+    double sum=0;
+            long int time;
         int tx_old;
         int tx_new;
-        
+
+     printf("start time %ld\nend time %ld\n",start_time,end_time);
+    while(txLog.good() )
+    {
+
+
         txLog>>time;
         txLog>>tx_old;
         txLog>>tx_new;
-        
+
         if(time<=start_time )
         {
             start_tx=tx_old;
@@ -42,7 +50,7 @@ int main( int argc, const char* argv[] )
         }
         else if(time>=end_time)
         {
-            sum+=(end_time-pre_time)*tx_old;
+            tx_new=tx_old;
             break ;
         }
         else
@@ -51,10 +59,10 @@ int main( int argc, const char* argv[] )
             pre_time=time;
         }
     }
+    
     txLog.close();
+    sum+=(end_time-pre_time)*tx_new;
     
-    double avg=(double)sum/(start_time-end_time);
-    
-    cout<<avg;
-    
+    double avg=sum/(end_time-start_time);
+    printf("average power %f\n",avg);
 }

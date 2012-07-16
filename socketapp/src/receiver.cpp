@@ -12,7 +12,7 @@
 #include <signal.h>
 #include <unistd.h>
 
-
+//this is a comment
 #define BUFF_S 3
 
 using namespace std;
