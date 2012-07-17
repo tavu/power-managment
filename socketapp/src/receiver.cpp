@@ -92,12 +92,18 @@ int receiver::setPower(char rssi)
     char tx_new;
     tx_new=PERF_RSSI+path_loss;
 
+    return setAbsPower(tx_new);
+}
+
+
+int receiver::setAbsPower(char tx_new)
+{
     if(tx_new <TX_MIN)
         tx_new=TX_MIN;
-
+    
     if(tx_new >TX_MAX)
         tx_new=TX_MAX;
-
+    
     if(tx_new!=curr_tx)
     {
         char foo[3];
@@ -106,14 +112,14 @@ int receiver::setPower(char rssi)
         cmd+=" txpower ";
         sprintf(foo,"%d",tx_new);
         cmd.append(foo);
-
+        
         time_t t=time(NULL);
         if(system(cmd.c_str()) !=0)
         {
             cout<<"error on system command"<<endl;
             return -1;
         }
-
+        
         txLog.open(TX_LOG,std::ios::out | std::ios::app);
         int txl=curr_tx;
         txLog<<t<<'\t'<<txl;
@@ -121,9 +127,8 @@ int receiver::setPower(char rssi)
         txLog<<'\t'<<txl<<endl;
         curr_tx=tx_new;
         txLog.close();
-
+        
         log<<'\t'<<cmd<<endl;
-    }
-
+    } 
     return 0;
 }

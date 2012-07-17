@@ -191,7 +191,7 @@ void baseReceiver::checkForTimeouts()
     if(low_rssi==-1)
     {
         low_rssi=PERF_RSSI;
-        setPower(low_rssi);
+        setAbsPower(low_rssi);
     }
     else if(abs(PERF_RSSI - low_rssi) > TX_CONST)
     {

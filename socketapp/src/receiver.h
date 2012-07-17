@@ -32,7 +32,8 @@ class receiver :public Thread
         virtual void rssiReceived(std::string ip,char rssi)=0;
         void sendRssiAck(std::string ip,char rssi);
         virtual void handShR(std::string ip)=0;
-
+        int setAbsPower(char tx_new);
+        
         std::ofstream log;
         socketC *soc;
         
