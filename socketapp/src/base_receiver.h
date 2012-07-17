@@ -13,7 +13,7 @@ class baseReceiver :public receiver
 	    pthread_mutex_init(&mutex, NULL);
             low_rssi=255;//just a very big value
         }
-	void checkForTimeouts();
+	    void checkForTimeouts();
     protected:
         void rssiReceived(std::string ip,char rssi);
         void handShR(std::string ip);

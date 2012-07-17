@@ -29,10 +29,11 @@ void baseReceiver::rssiReceived(string ip,char value)
 
     if(n==0)
     {
+        unlock();
         return ;
     }
 
-    n->setMySignal(value);    
+    n->setMySignal(value);
 
     if(low_nodes.empty() )
     {
@@ -109,7 +110,7 @@ char baseReceiver::find_lowest()
     
     if(it==nMap()->ipEnd() )
     {
-      return PERF_RSSI;
+      return -1;
     }
     
     char lowest = nMap()->nodeFromIt(it)->mySignal();
@@ -187,7 +188,12 @@ void baseReceiver::checkForTimeouts()
     nMap()->unlock();
     
     low_rssi=find_lowest();
-    if(abs(PERF_RSSI - low_rssi) > TX_CONST)
+    if(low_rssi==-1)
+    {
+        low_rssi=PERF_RSSI;
+        setPower(low_rssi);
+    }
+    else if(abs(PERF_RSSI - low_rssi) > TX_CONST)
     {
         setPower(low_rssi);
         clear();
