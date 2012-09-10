@@ -3,7 +3,7 @@
 
 #include "thread.h"
 #include "base_receiver.h"
-#define TIMEOUT 6
+#define TIMEOUT 3
 
 
 class timeoutChecker : public Thread

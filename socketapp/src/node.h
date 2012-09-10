@@ -12,6 +12,7 @@ class node
         node(std::string mac,std::string ip) :_mac(mac),_ip(ip)
         {
             count=0;
+	    hello_messages = 1;
 //             _lastRssi=-1;
             ackRssi=-1;
             _mySignal=20;

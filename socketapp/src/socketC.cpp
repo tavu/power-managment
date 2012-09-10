@@ -19,7 +19,7 @@ int socketC::bindSocket()
 {
     memset(&bindSa, 0, sizeof bindSa);
     bindSa.sin_family = PF_INET;
-    bindSa.sin_port = SPORT;
+    bindSa.sin_port =htons(SPORT);
     bindSa.sin_addr.s_addr = INADDR_ANY;
     socklen_t len = sizeof(peer);
 
@@ -109,7 +109,7 @@ int socketC::sendMessage(string ip,char* buff, int size)
     struct sockaddr_in sa;
     memset(&sa, 0, sizeof sa);
     sa.sin_family = PF_INET;
-    sa.sin_port = SPORT;
+    sa.sin_port = htons(SPORT);
     sa.sin_addr.s_addr = inet_addr(ip.c_str() );
 
     sendto(sockfd,buff,size,0,(struct sockaddr *)&sa,sizeof(sa));

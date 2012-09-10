@@ -15,6 +15,8 @@
 using namespace std;
 typedef std::map<std::string,node*>::iterator nodeIter;
 
+#define DB(STRING) cout<<#STRING<<endl;
+
 void baseReceiver::rssiReceived(string ip,char value)
 {
     if(value<0)
@@ -110,7 +112,8 @@ char baseReceiver::find_lowest()
     
     if(it==nMap()->ipEnd() )
     {
-      return -1;
+        nMap()->unlock();
+        return -1;
     }
     
     char lowest = nMap()->nodeFromIt(it)->mySignal();
@@ -160,34 +163,36 @@ void baseReceiver::handShR(string ip)
 
 void baseReceiver::checkForTimeouts()
 {
+
     lock();
     nMap()->lock();
+
     nodeIter cnode = nMap()->ipBegin();
     while(cnode!=nMap()->ipEnd() )
     {
-            
-      if(nMap()->nodeFromIt(cnode) -> getHelloMessages() == 0)
-      {
-	//sdf
-	if(low_rssi== nMap()->nodeFromIt(cnode)->mySignal())
-	{
-	  low_nodes.remove( nMap()->nodeFromIt(cnode)->ip() );
-	}
-	nodeIter delI=cnode;
-	cnode++;
-	nMap()->delete_node(nMap()->nodeFromIt(delI));
-      }
-      else
-      {
-	nMap()->nodeFromIt(cnode) -> resetHelloMessages();
-	cnode++;
-      }
+        if(nMap()->nodeFromIt(cnode) -> getHelloMessages() == 0)
+        {
+            if(low_rssi== nMap()->nodeFromIt(cnode)->mySignal())
+            {
+                low_nodes.remove( nMap()->nodeFromIt(cnode)->ip() );
+            }
+            nodeIter delI=cnode;
+            cnode++;
+            nMap()->delete_node(nMap()->nodeFromIt(delI));
+        }
+        else
+        {
+            nMap()->nodeFromIt(cnode) -> resetHelloMessages();
+            cnode++;
+        }
     }
     
 
     nMap()->unlock();
     
+    
     low_rssi=find_lowest();
+    
     if(low_rssi==-1)
     {
         low_rssi=PERF_RSSI;

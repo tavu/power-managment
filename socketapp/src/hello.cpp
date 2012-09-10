@@ -1,7 +1,7 @@
 #include"hello.h"
 #include "nodeMap.h"
 
-#define TIME 2//in seconts
+#define TIME 1//in seconts
 
 int helloMessage::run()
 {

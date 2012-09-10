@@ -7,6 +7,7 @@
 #include "thread.h"
 #define LOG_F "receiver.log"
 #define TX_LOG "tx.log"
+#define DB(STRING) cout<<#STRING<<endl;
 
 class receiver :public Thread
 {

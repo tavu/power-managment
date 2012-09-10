@@ -4,6 +4,7 @@
 #include"socketC.h"
 #include"timeout.h"
 #include <signal.h>
+#include <cstdlib>
 #include <unistd.h>
 
 sender *Send;
@@ -33,8 +34,7 @@ int main()
     Rec->start();
     Chk->start();
     Send->start();
-    Rec->join();
-    Chk->join();
+    Rec->join(); 
 }
 
 void leave(int sig)
@@ -46,4 +46,6 @@ void leave(int sig)
     delete Send;
     nodeMap::clear();
     delete Soc;
+    delete Chk;
+    exit (0);
 }
